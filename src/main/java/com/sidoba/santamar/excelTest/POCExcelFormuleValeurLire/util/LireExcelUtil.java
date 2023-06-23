@@ -42,7 +42,7 @@ public class LireExcelUtil {
 
             StringBuilder tableHTML = new StringBuilder();
             tableHTML.append("<table>")
-                    .append("<tr><th>Valeur</th><th>Type</th><th>Cellule Excel</th></tr>");
+                    .append("<tr><th>Formule</th><th>Valeur</th><th>Type</th><th>Cellule Excel</th></tr>");
 
             //Nous passons en revue toutes les lignes
             for (int ligneIdx = premierLigne; ligneIdx <= dernierLigne; ligneIdx++) {
@@ -65,31 +65,80 @@ public class LireExcelUtil {
                         continue;
                     }
 
+                    String tableLigneOuverture = "<tr>";
+                    String tableLigneFermeture = "</tr>";
+                    String tableCelluleOuverture = "<td>";
+                    String tableCelluleFermeture = "</td>";
+
+                    StringBuilder stringBuilder = new StringBuilder();
+
                     switch (cellule.getCachedFormulaResultType()) {
                         case BOOLEAN:
-                            tableHTML.append("<tr><td>" + cellule.getBooleanCellValue() + "</td><td>Booléen</td><td>" +
-                                    CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1) + "</td></tr>");
+                            stringBuilder.append(tableLigneOuverture)
+                                    .append(tableCelluleOuverture)
+                                    .append(cellule.getCellFormula())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append(cellule.getBooleanCellValue())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append("Booléen");
                             break;
                         case NUMERIC:
                             if (DateUtil.isCellDateFormatted(cellule)) {
-                                tableHTML.append("<tr><td>" + cellule.getDateCellValue() + "</td><td>Date</td><td>" +
-                                        CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1) + "</td></tr>");
+                                stringBuilder.append(tableLigneOuverture)
+                                        .append(tableCelluleOuverture)
+                                        .append(cellule.getCellFormula())
+                                        .append(tableCelluleFermeture)
+                                        .append(tableCelluleOuverture)
+                                        .append(cellule.getDateCellValue())
+                                        .append(tableCelluleFermeture)
+                                        .append(tableCelluleOuverture)
+                                        .append("Date");
                             }
                             else {
-                                tableHTML.append("<tr><td>" + cellule.getNumericCellValue() + "</td><td>Numérique</td><td>" +
-                                        CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1) + "</td></tr>");
+                                stringBuilder.append(tableLigneOuverture)
+                                        .append(tableCelluleOuverture)
+                                        .append(cellule.getCellFormula())
+                                        .append(tableCelluleFermeture)
+                                        .append(tableCelluleOuverture)
+                                        .append(cellule.getNumericCellValue())
+                                        .append(tableCelluleFermeture)
+                                        .append(tableCelluleOuverture)
+                                        .append("Numérique");
                             }
                             break;
                         case STRING:
-                            tableHTML.append("<tr><td>" + cellule.getRichStringCellValue() + "</td><td>String</td><td>" +
-                                    CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1) + "</td></tr>");
+                            stringBuilder.append(tableLigneOuverture)
+                                    .append(tableCelluleOuverture)
+                                    .append(cellule.getCellFormula())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append(cellule.getRichStringCellValue())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append("String");
                             break;
                         case ERROR:
-                            tableHTML.append("<tr style=\"font-weight: bold; color: red;\"><td>" + ErrorConstant.valueOf(cellule.getErrorCellValue()).getText() + "</td><td>ERREUR</td><td>" +
-                                    CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1) + "</td></tr>");
+                            stringBuilder.append("<tr style=\"font-weight: bold; color: red;\">")
+                                    .append(tableCelluleOuverture)
+                                    .append(cellule.getCellFormula())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append(ErrorConstant.valueOf(cellule.getErrorCellValue()).getText())
+                                    .append(tableCelluleFermeture)
+                                    .append(tableCelluleOuverture)
+                                    .append("ERREUR");
                             break;
 
                     }
+                    stringBuilder.append(tableCelluleFermeture)
+                            .append(tableCelluleOuverture)
+                            .append(CellReference.convertNumToColString(cellule.getColumnIndex()) + (cellule.getRowIndex() + 1))
+                            .append(tableCelluleFermeture)
+                            .append(tableLigneFermeture);
+
+                    tableHTML.append(stringBuilder.toString());
                 }
 
             }
