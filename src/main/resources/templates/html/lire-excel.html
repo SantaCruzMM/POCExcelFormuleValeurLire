@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Charger un fichier Excel</title>
+    </head>
+    <body>
+        <h1>Charger un fichier Excel</h1>
+        <form id="uploadForm" enctype="multipart/form-data" action="/api/lire-excel/chargerFichier" method="post">
+            <input type="file" id="fileInput" name="file">
+            <button type="submit">Charger</button>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Charger un fichier Excel</title>
+    </head>
+    <body>
+        <h1>Charger un fichier Excel</h1>
+        <form id="uploadForm" enctype="multipart/form-data" action="/api/lire-excel/chargerFichier" method="post">
+            <input type="file" id="fileInput" name="file">
+            <button type="submit">Charger</button>
+        </form><br>
+        <hr>
+
+        <table>
+            <tr>
+                <td th:utext="${tableHTML}"></td>
+            </tr>
+        </table>
+    </body>
+
+    <style>
+        tr {
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+</html>
