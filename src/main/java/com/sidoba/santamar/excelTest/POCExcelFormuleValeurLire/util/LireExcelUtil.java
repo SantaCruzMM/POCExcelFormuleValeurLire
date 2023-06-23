@@ -14,6 +14,8 @@ import java.io.IOException;
 public class LireExcelUtil {
     public static String creerTableValeurs(MultipartFile multipartFile) {
         try {
+            long tempsInitial = System.currentTimeMillis();
+
             File fichier = File.createTempFile("temp", multipartFile.getOriginalFilename());
             multipartFile.transferTo(fichier);
 
@@ -145,6 +147,12 @@ public class LireExcelUtil {
             tableHTML.append("</table>");
             workbook.close();
             inputStream.close();
+            long tempsFinale = System.currentTimeMillis();
+
+            long tempsExecution = tempsFinale - tempsInitial;
+            tableHTML.append("<pre style=\"font-size: 20px;\">Temps d'exécution: ")
+                    .append(tempsExecution)
+                    .append(" ms");
 
             return tableHTML.toString();
 
